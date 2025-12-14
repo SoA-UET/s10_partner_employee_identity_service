@@ -1,17 +1,4 @@
-from flask import Flask, Blueprint, url_for
-from flask_socketio import SocketIO
-from ..utils.streaming import Streaming
-
-class ApiVersion:
-    def __init__(self, name, blueprint):
-        # type: (ApiVersion, str, Blueprint) -> None
-        self.name = name
-        self.blueprint = blueprint
-
-from .v1 import v1
-API_VERSIONS = [
-    ApiVersion("v1", v1),
-] # type: list[ApiVersion]
+# Controllers are registered in __main__.py
 
 
 
