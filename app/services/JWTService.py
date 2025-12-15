@@ -65,6 +65,7 @@ class JWTService:
         return key
     
     def get_all_active_keys(self):
+        self.get_latest_active_key()
         keys = list(self.signing_keys_collection.find(
             {"is_active": True},
             {"_id": 0, "kid": 1, "public_key": 1, "algorithm": 1, "use": 1}
