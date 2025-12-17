@@ -51,7 +51,7 @@ def init_database():
         roles = [
             {
                 "_id": ObjectId("694025ac0496f58b284da758"),
-                "name": "ADMIN",
+                "name": "PARTNER_ADMIN",
                 "permissions": [
                     "employee.read",
                     "employee.write",
