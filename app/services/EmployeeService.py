@@ -152,6 +152,42 @@ class EmployeeService:
         
         return self.employees_collection.find_one({"_id": object_id})
     
+    def get_employee_detail(self, employee_id: str):
+        """Get employee detail with roles and permissions"""
+        object_id = str_to_objectid(employee_id)
+        if not object_id:
+            return {"error": "INVALID_EMPLOYEE_ID", "message": "Employee ID không hợp lệ"}
+        
+        employee = self.employees_collection.find_one(
+            {"_id": object_id},
+            {"password_hash": 0}  # Exclude password hash
+        )
+        
+        if not employee:
+            return {"error": "EMPLOYEE_NOT_FOUND", "message": "Không tìm thấy nhân viên"}
+        
+        # Get role with permissions
+        role = self.roles_collection.find_one({"_id": employee["role_id"]})
+        
+        if role:
+            employee["role"] = {
+                "id": str(role["_id"]),
+                "name": role["name"],
+                "permissions": role.get("permissions", [])
+            }
+            # Remove role_id to avoid duplication
+            del employee["role_id"]
+        else:
+            employee["role"] = None
+        
+        # Convert ObjectId to string
+        employee["_id"] = str(employee["_id"])
+        
+        return {
+            "status": "success",
+            "employee": employee
+        }
+    
     def get_all_employees(self, page: int = 1, limit: int = 10, status: str = None):
         """Get list of employees with pagination"""
         skip = (page - 1) * limit

@@ -84,6 +84,42 @@ def login():
     
     return jsonify(result), 200
 
+@employees_bp.route('/api/v1/partner-employees', methods=['GET'])
+@require_auth
+def get_all_employees():
+    """Get all employees with pagination"""
+    page = request.args.get('page', 1, type=int)
+    limit = request.args.get('limit', 10, type=int)
+    status = request.args.get('status')
+    
+    result = employee_service.get_all_employees(page=page, limit=limit, status=status)
+    
+    # Convert ObjectIds to strings
+    for emp in result['employees']:
+        emp['_id'] = str(emp['_id'])
+        emp['role_id'] = str(emp['role_id'])
+    
+    return jsonify({
+        "status": "success",
+        "data": result
+    }), 200
+
+@employees_bp.route('/api/v1/partner-employees/<employee_id>', methods=['GET'])
+@require_auth
+def get_employee_detail(employee_id):
+    """Get employee detail with roles and permissions"""
+    result = employee_service.get_employee_detail(employee_id)
+    
+    if result.get('error'):
+        status_code = 404 if 'NOT_FOUND' in result['error'] else 400
+        return jsonify({
+            "status": "error",
+            "error_code": result['error'],
+            "message": result['message']
+        }), status_code
+    
+    return jsonify(result), 200
+
 @employees_bp.route('/api/v1/partner-employees', methods=['POST'])
 @require_auth
 def create_employee():
