@@ -17,7 +17,6 @@ class Collections:
         self.signing_keys = self.db["signing_keys"]
         
         self._setup_indexes()
-    
     def _setup_indexes(self):
         self.roles.create_index([("name", ASCENDING)], unique=True)
         self.employees.create_index([("email", ASCENDING)], unique=True)
