@@ -80,7 +80,7 @@ def init_database():
         inserted_roles = []
         for role in roles:
             result = roles_collection.update_one({ "_id": role["_id"] }, { "$set": role }, upsert=True)
-            inserted_roles.append({**role, "_id": result.inserted_id})
+            inserted_roles.append({**role, "_id": result.upserted_id})
             print(f"Created role: {role['name']}")
         
         # Find ADMIN role
