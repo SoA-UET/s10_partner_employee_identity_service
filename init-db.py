@@ -83,8 +83,8 @@ def init_database():
             inserted_roles.append({**role, "_id": result.upserted_id})
             print(f"Created role: {role['name']}")
         
-        # Find ADMIN role
-        admin_role = next(r for r in inserted_roles if r["name"] == "ADMIN")
+        # Find PARTNER_ADMIN role
+        admin_role = next(r for r in inserted_roles if r["name"] == "PARTNER_ADMIN")
         
         # Check if admin account already exists
         existing_admin = employees_collection.find_one({"email": "admin_partner@telcenter.vn"})
