@@ -5,12 +5,32 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from app.collections import Collections
+from app.services.JWTService import JWTService
+from app.services.AuthService import AuthService
+from app.services.LoggerService import LoggerService
 
 collections = Collections()
 roles_collection = collections.roles
 employees_collection = collections.employees
+signing_keys_collection = collections.signing_keys
 
-from app.utils.password import hash_password
+logger_service = LoggerService()
+
+jwt_service = JWTService(
+    signing_keys_collection=signing_keys_collection,
+    logger=logger_service,
+)
+
+
+auth_service = AuthService(
+    employees_collection=employees_collection,
+    roles_collection=roles_collection,
+    jwt_service=jwt_service,
+    logger=logger_service,
+)
+
+hash_password = auth_service.hash_password
+
 from datetime import datetime
 
 from bson import ObjectId
