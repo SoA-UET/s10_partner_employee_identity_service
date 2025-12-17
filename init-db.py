@@ -4,7 +4,12 @@ Initialize database with default roles and admin account
 from dotenv import load_dotenv
 load_dotenv()
 
-from app.collections import employees_collection, roles_collection
+from app.collections import Collections
+
+collections = Collections()
+roles_collection = collections.roles
+employees_collection = collections.employees
+
 from app.utils.password import hash_password
 from datetime import datetime
 
