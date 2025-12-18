@@ -226,4 +226,4 @@ def get_jwks():
             "use": key["use"]
         })
     
-    return jsonify({"keys": jwks_keys}), 200
+    return jsonify(jwks_keys), 200
